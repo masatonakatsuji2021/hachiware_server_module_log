@@ -9,8 +9,8 @@
  */
  
 const fs = require("fs");
- const tool = require("hachiware_tool");
- const path0 = require("path");
+const tool = require("hachiware_tool");
+const path0 = require("path");
 
 module.exports = function(conf, modules){
 
