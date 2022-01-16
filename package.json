@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/masatonakatsuji2021/hachiware_server_module_log.git"
   },
+  "dependencies": {
+    "hachiware_tool": "^1.0.0"
+  },
   "keywords": [
     "hachiware",
     "hachiware_server",
