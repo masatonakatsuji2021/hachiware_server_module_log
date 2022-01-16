@@ -12,7 +12,7 @@ const fs = require("fs");
 const tool = require("hachiware_tool");
 const path0 = require("path");
 
-module.exports = function(conf, modules){
+module.exports = function(conf){
 
     /**
      * defaultConvert
@@ -156,11 +156,10 @@ module.exports = function(conf, modules){
 
     /**
      * fookAccess
-     * @param {*} resolve 
      * @param {*} req 
      * @param {*} res 
      */
-    this.fooKAccess = function(resolve, req, res){
+    this.fookAccess = function(req, res){
 
         if(!tool.objExists(conf,"logs.access")){
             return;
@@ -209,18 +208,15 @@ module.exports = function(conf, modules){
         }
 
         fs.appendFileSync(logPath, contents + "\n");
-        
-        resolve();
     };
 
     /**
      * fookError
-     * @param {*} resolve 
      * @param {*} error 
      * @param {*} req 
      * @param {*} res 
      */
-    this.fookError = function(resolve, errorException, req, res){
+    this.fookError = function(errorException, req, res){
 
         if(!tool.objExists(conf,"logs.error")){
             return;
@@ -279,8 +275,6 @@ module.exports = function(conf, modules){
         }
 
         fs.appendFileSync(logPath, contents + "\n");
-        
-        resolve();
     };
 
 };
