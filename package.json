@@ -1,6 +1,6 @@
 {
   "name": "hachiware_server_module_log",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Log output module of web server package \"hachiware_server\".",
   "main": "index.js",
   "scripts": {
