@@ -225,7 +225,12 @@ The shortcodes of each format and their output results are as follows.
 
 ---
 
-License : MIT License  
-Author : Nakatsuji Masato.  
-Github : [https://github.com/masatonakatsuji2021/hachiware_server_module_log](https://github.com/masatonakatsuji2021/hachiware_server_module_log)  
-npm : [https://www.npmjs.com/package/hachiware_server_module_log](https://www.npmjs.com/package/hachiware_server_module_log)
+hachiware_server_module_log
+
+Log output module of web server package "hachiware_server".
+ 
+License : MIT License.   
+Author  : Nakatsuji Masato  
+HP URL  : [https://hachiware-js.com/](https://hachiware-js.com/)  
+GitHub  : [https://github.com/masatonakatsuji2021/hachiware_server_module_log](https://github.com/masatonakatsuji2021/hachiware_server_module_log)  
+npm     : [https://www.npmjs.com/package/hachiware_server_module_log](https://www.npmjs.com/package/hachiware_server_module_log)
