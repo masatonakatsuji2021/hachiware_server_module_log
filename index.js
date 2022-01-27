@@ -101,9 +101,9 @@ module.exports = function(conf){
             return;
         }
 
-        var logPath = "logs/startEnd/startEnd.log";
+        var logPath = conf.rootPath + "/logs/startEnd/startEnd.log";
         if(startEnd.path){
-            logPath = startEnd.path;
+            logPath = conf.rootPath + "/" + startEnd.path;
         }
 
         var contents = "[{DATETIME}] MODE={MODE} HOST={HOST} PORT={PORT} SSL={SSL} CONF={CONF_FILE}";
@@ -177,9 +177,9 @@ module.exports = function(conf){
             return;
         }
 
-        var logPath = "logs/access/access-{YYYY}-{MM}.log";
+        var logPath = conf.rootPath + "/logs/access/access-{YYYY}-{MM}.log";
         if(access.path){
-            logPath = access.path;
+            logPath =  conf.rootPath + "/" + access.path;
         }
 
         var contents = "[{DATETIME}] METHOD={METHOD} REQUEST_URI={REQUEST_URL} REMOTE_IP={REMOTE_IP} RESPONSE_CODE={RESPONSE_CODE}";
@@ -234,9 +234,9 @@ module.exports = function(conf){
             return;
         }
 
-        var logPath = "logs/error/error-{YYYY}-{MM}.log";
+        var logPath = conf.rootPath + "/logs/error/error-{YYYY}-{MM}.log";
         if(errLog.path){
-            logPath = errLog.path;
+            logPath = conf.rootPath + "/" + errLog.path;
         }
 
         var contents = "[{DATETIME}] METHOD={METHOD} REQUEST_URI={REQUEST_URL} REMOTE_IP={REMOTE_IP} RESPONSE_CODE={RESPONSE_CODE} ERROR_EXP={ERROR_EXCEPTION} ERROR_STACK={ERROR_STACK}";
@@ -283,4 +283,51 @@ module.exports = function(conf){
         fs.appendFileSync(logPath, contents + "\n");
     };
 
+    this.fookSysError = function(errorException){
+
+        
+        if(!tool.objExists(conf,"logs.sysError")){
+            return;
+        }
+
+        var errLog = conf.logs.sysError;
+
+        if(!errLog.enable){
+            return;
+        }
+
+        var logPath = conf.rootPath + "/logs/sysError/sysError-{YYYY}-{MM}-{DD}.log";
+        if(errLog.path){
+            logPath = conf.rootPath + "/" + errLog.path;
+        }
+
+        var contents = "[{DATETIME}] ERROR_EXP={ERROR_EXCEPTION} ERROR_STACK={ERROR_STACK}";
+        if(errLog.contents){
+            contents = errLog.contents;
+        }
+
+        var d = new Date();
+
+        logPath = defaultConvert(logPath, d, conf);
+        contents = defaultConvert(contents, d, conf);
+
+        defaultMkDir(logPath);
+
+        contents = contents.replace("{ERROR_EXCEPTION}", errorException);
+
+        var errStack = "";
+        if(errorException.stack){
+            errStack = errorException.stack;
+        }
+        contents = contents.replace("{ERROR_STACK}", errStack);
+
+        if(errLog.callback){
+            var buff = errLog.callback(contents, errorException, conf, req, res);
+            if(buff){
+                contents = buff;
+            }
+        }
+
+        fs.appendFileSync(logPath, contents + "\n");
+    };
 };
