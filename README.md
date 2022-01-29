@@ -186,42 +186,63 @@ logs: {
 
 ---
 
+## # Log output when an system error occurs
+
+If you want to output the log when a system failure error occurs due to a request from the server, specify ``sysError`` in ``logs``.
+
+```javascript
+logs: {
+    ...
+    // ssytem error write log
+    sysError: {
+        enable: true,
+        path: "logs/sysError/sysError-{YYYY}-{MM}.log",
+        contents: "[{DATETIME}] {METHOD} {ERROR_EXCEPTION} {ERROR_STACK}",
+    },
+     ...
+},
+```
+
+Items that can be set are the same as for ``error``.
+
+---
+
 <a id="dfp"></a>
 
 ## # Dynamic format placement (DFP)
 
-By embedding the error output path and error content as a short code, log information can be dynamically output to any location.0
+By embedding the error output path and error content as a short code, log information can be dynamically output to any location.
 
 For example, logs can be divided by month, year, etc., making it easier to organize output logs.  
-There is no need to prepare a batch program required for hostile log collection.
+There is no need to prepare the batch program required for log collection.
 
 The shortcodes of each format and their output results are as follows.
 
-|Short code|startUp|access|error|Output result|
-|:--|:-|:--|:--|:--|
-|{DATETIME}|〇|〇|〇|Log output date and time.<br>{YYYY}/{MM}/{DD} {HH}:{mm}:{ss}|
-|{DATE}|〇|〇|〇|Log output date.<br>{YYYY}/{MM}/{DD}|
-|{TIME}|〇|〇|〇|Log output time.<br>{HH}:{mm}:{ss}|
-|{YYYY}|〇|〇|〇|Log output year|
-|{MM}|〇|〇|〇|Log output month|
-|{DD}|〇|〇|〇|Log output day|
-|{HH}|〇|〇|〇|Log output hour|
-|{mm}|〇|〇|〇|Log output minutes|
-|{ss}|〇|〇|〇|Log output second|
-|{HOST}|〇|〇|〇|Host name|
-|{PORT}|〇|〇|〇|Port Number|
-|{SSL}|〇|〇|〇|SSL enabled/disabled|
-|{LISTEN_URI}|〇|〇|〇|Requestable URL|
-|{CONF_FILE}|〇|〇|〇|Read setting file name|
-|{MODE}|〇|-|-|Server start\end|
-|{METHOD}|-|〇|〇|Request method|
-|{REQUEST_URL}|-|〇|〇|Requested URL|
-|{RESPONSE_CODE}|-|〇|〇|Response code number|
-|{REMOTE_IP}|-|〇|〇|Source IP address information|
-|{REQUEST_QUERY}|-|〇|〇|Query information(GET)|
-|{REQUEST_BODY}|-|〇|〇|Request body|
-|{ERROR_EXCEPTION}|-|-|〇|Error message|
-|{ERROR_STACK}|-|-|〇|Error details|
+|Short code|startUp|access|error|sysError|Output result|
+|:--|:-|:--|:--|:--|:--|
+|{DATETIME}|〇|〇|〇|〇|Log output date and time.<br>{YYYY}/{MM}/{DD} {HH}:{mm}:{ss}|
+|{DATE}|〇|〇|〇|〇|Log output date.<br>{YYYY}/{MM}/{DD}|
+|{TIME}|〇|〇|〇|〇|Log output time.<br>{HH}:{mm}:{ss}|
+|{YYYY}|〇|〇|〇|〇|Log output year|
+|{MM}|〇|〇|〇|〇|Log output month|
+|{DD}|〇|〇|〇|〇|Log output day|
+|{HH}|〇|〇|〇|〇|Log output hour|
+|{mm}|〇|〇|〇|〇|Log output minutes|
+|{ss}|〇|〇|〇|〇|Log output second|
+|{HOST}|〇|〇|〇|〇|Host name|
+|{PORT}|〇|〇|〇|〇|Port Number|
+|{SSL}|〇|〇|〇|〇|SSL enabled/disabled|
+|{LISTEN_URI}|〇|〇|〇|〇|Requestable URL|
+|{SSNAME}|〇|〇|〇|〇|Target server section name|
+|{MODE}|〇|-|-|-|Server start\end|
+|{METHOD}|-|〇|〇|-|Request method|
+|{REQUEST_URL}|-|〇|〇|-|Requested URL|
+|{RESPONSE_CODE}|-|〇|〇|-|Response code number|
+|{REMOTE_IP}|-|〇|〇|-|Source IP address information|
+|{REQUEST_QUERY}|-|〇|〇|-|Query information(GET)|
+|{REQUEST_BODY}|-|〇|〇|-|Request body|
+|{ERROR_EXCEPTION}|-|-|〇|〇|Error message|
+|{ERROR_STACK}|-|-|〇|〇|Error details|
 
 ---
 

@@ -16,16 +16,17 @@
  
 const fs = require("fs");
 const tool = require("hachiware_tool");
+const { Http2ServerRequest } = require("http2");
 const path0 = require("path");
 
 module.exports = function(conf){
 
     /**
      * defaultConvert
-     * @param {*} strs 
-     * @param {*} date 
-     * @param {*} conf 
-     * @returns 
+     * @param {string} strs Log content
+     * @param {Date} date Today's date object
+     * @param {Conf} conf Server section configuration data
+     * @returns {string} Log content with all values replaced
      */
     const defaultConvert = function(strs, date, conf){
 
@@ -57,14 +58,15 @@ module.exports = function(conf){
 
         strs = strs.replace("{SSL}", ssl);
         strs = strs.replace("{LISTEN_URI}", url);
-        strs = strs.replace("{CONF_FILE}", path0.basename(conf._file));
+        strs = strs.replace("{SSNAME}", path0.basename(conf.rootPath));
+        strs = strs.replace("{PID}",process.pid);
 
         return strs;
     };
 
     /**
      * defaultMkDir
-     * @param {*} logPath 
+     * @param {string} logPath Destination log file path
      */
     const defaultMkDir = function(logPath){
 
@@ -86,7 +88,8 @@ module.exports = function(conf){
 
     /**
      * fookStartEnd
-     * @param {*} mode 
+     * Hooks that run when the server starts or ends
+     * @param {boolean} mode Server start / end flags (true: Server start, false:Server end)
      * @returns 
      */
     const fookStartEnd = function(mode){
@@ -106,7 +109,7 @@ module.exports = function(conf){
             logPath = conf.rootPath + "/" + startEnd.path;
         }
 
-        var contents = "[{DATETIME}] MODE={MODE} HOST={HOST} PORT={PORT} SSL={SSL} CONF={CONF_FILE}";
+        var contents = "[{DATETIME}] PID={PID} MODE={MODE} HOST={HOST} PORT={PORT} SSL={SSL} SSNAME={SSNAME}";
         if(startEnd.contents){
             contents = startEnd.contents;
         }
@@ -162,8 +165,9 @@ module.exports = function(conf){
 
     /**
      * fookAccess
-     * @param {*} req 
-     * @param {*} res 
+     * Hook executed when a request is received to the server
+     * @param {serverRequest} req Server request object
+     * @param {serverResponse} res Server response object
      */
     this.fookAccess = function(req, res){
 
@@ -182,7 +186,7 @@ module.exports = function(conf){
             logPath =  conf.rootPath + "/" + access.path;
         }
 
-        var contents = "[{DATETIME}] METHOD={METHOD} REQUEST_URI={REQUEST_URL} REMOTE_IP={REMOTE_IP} RESPONSE_CODE={RESPONSE_CODE}";
+        var contents = "[{DATETIME}] PID={PID} METHOD={METHOD} REQUEST_URI={REQUEST_URL} REMOTE_IP={REMOTE_IP} RESPONSE_CODE={RESPONSE_CODE} SSNAME={SSNAME}";
         if(access.contents){
             contents = access.contents;
         }
@@ -218,9 +222,10 @@ module.exports = function(conf){
 
     /**
      * fookError
-     * @param {*} error 
-     * @param {*} req 
-     * @param {*} res 
+     * Hook executed when an error occurs on a server request.
+     * @param {errorException} error Error information
+     * @param {serverRequest} req Server request object
+     * @param {serverResponse} res Server response object
      */
     this.fookError = function(errorException, req, res){
 
@@ -239,7 +244,7 @@ module.exports = function(conf){
             logPath = conf.rootPath + "/" + errLog.path;
         }
 
-        var contents = "[{DATETIME}] METHOD={METHOD} REQUEST_URI={REQUEST_URL} REMOTE_IP={REMOTE_IP} RESPONSE_CODE={RESPONSE_CODE} ERROR_EXP={ERROR_EXCEPTION} ERROR_STACK={ERROR_STACK}";
+        var contents = "[{DATETIME}] PID={PID} METHOD={METHOD} REQUEST_URI={REQUEST_URL} REMOTE_IP={REMOTE_IP} RESPONSE_CODE={RESPONSE_CODE} ERROR_EXP={ERROR_EXCEPTION} ERROR_STACK={ERROR_STACK} SSNAME={SSNAME}";
         if(errLog.contents){
             contents = errLog.contents;
         }
@@ -283,6 +288,12 @@ module.exports = function(conf){
         fs.appendFileSync(logPath, contents + "\n");
     };
 
+    /**
+     * fookSysError
+     * Hooks that are executed in the event of a system failure
+     * @param {errorException} errorException Error information
+     * @returns 
+     */
     this.fookSysError = function(errorException){
 
         
@@ -301,7 +312,7 @@ module.exports = function(conf){
             logPath = conf.rootPath + "/" + errLog.path;
         }
 
-        var contents = "[{DATETIME}] ERROR_EXP={ERROR_EXCEPTION} ERROR_STACK={ERROR_STACK}";
+        var contents = "[{DATETIME}] PID={PID} ERROR_EXP={ERROR_EXCEPTION} ERROR_STACK={ERROR_STACK} SSNAME={SSNAME}";
         if(errLog.contents){
             contents = errLog.contents;
         }
