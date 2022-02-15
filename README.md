@@ -80,8 +80,6 @@ The life cycle of this server module is as follows:
 ```code
 (server listen start)
     |
-load fook start                         <=: output startEnd log. (mode = true)
-    |
 (request)
     |
 load fook access                        <= Output access log.
@@ -96,41 +94,11 @@ load fook access                        <= Output access log.
     |
     | * Quit the server
     |
-load fook end                           <= output startEnd log. (mode = false)
-    |
 (server listen exit)
 ```
 
-* "Load hook start" executes the start hook of each server module.  
 * "load fook access" executes the access hook of each sserver module.  
 * "load fook error" executes the error hook of the server module.
-* "Load hook end" executes the end hook of each server module.  
-
----
-
-## # Log main power at server start/end.
-
-If you want to output the log when the server is started or stopped, specify ``startup`` for ``logs``.
-
-```javascript
-logs: {
-    ...
-	// startup write log
-	startUp: {
-        enable: true,
-        path: "logs/startup/startup-{YYYY}.log",
-        contents: "[{DATETIME}] {MODE} {HOST}:{PORT} URL= {LISTEN_URI} CONF= {CONF_FILE}",
-    },
-    ...
-},
-```
-
-|colum|overview|
-|:--|:--|
-|enable|Specify here whether to enable / disable log output at server start/end.|
-|path|Specify the path of the log output destination.<br>If no path is specified, ``logs/startEnd/startEnd.log`` is output by default.<br>Specify the path as a relative path.<br>If the directory in the path does not exist, it will be created automatically.<br>Dynamic format placement (DFP) can be used for the path name. [Click here for details](#dfp)|
-|contents|Specify the content to be logged.<br>If no content is specified, it is output as `` [{DATETIME}] MODE = {MODE} HOST = {HOST} PORT = {PORT} SSL = {SSL} CONF = {CONF_FILE} `` by default.<br>You can use Dynamic Format Placement (DFP) for your content [Click here for details](#dfp)|
-|callback|Callback to execute when starting/stopping the server.<br>Arguments are context and server setting information. Set the log output contents in the return value.<br>If no return value is specified, the default content will be output.|
 
 ---
 
@@ -186,27 +154,6 @@ logs: {
 
 ---
 
-## # Log output when an system error occurs
-
-If you want to output the log when a system failure error occurs due to a request from the server, specify ``sysError`` in ``logs``.
-
-```javascript
-logs: {
-    ...
-    // ssytem error write log
-    sysError: {
-        enable: true,
-        path: "logs/sysError/sysError-{YYYY}-{MM}.log",
-        contents: "[{DATETIME}] {METHOD} {ERROR_EXCEPTION} {ERROR_STACK}",
-    },
-     ...
-},
-```
-
-Items that can be set are the same as for ``error``.
-
----
-
 <a id="dfp"></a>
 
 ## # Dynamic format placement (DFP)
@@ -218,31 +165,30 @@ There is no need to prepare the batch program required for log collection.
 
 The shortcodes of each format and their output results are as follows.
 
-|Short code|startUp|access|error|sysError|Output result|
-|:--|:-|:--|:--|:--|:--|
-|{DATETIME}|〇|〇|〇|〇|Log output date and time.<br>{YYYY}/{MM}/{DD} {HH}:{mm}:{ss}|
-|{DATE}|〇|〇|〇|〇|Log output date.<br>{YYYY}/{MM}/{DD}|
-|{TIME}|〇|〇|〇|〇|Log output time.<br>{HH}:{mm}:{ss}|
-|{YYYY}|〇|〇|〇|〇|Log output year|
-|{MM}|〇|〇|〇|〇|Log output month|
-|{DD}|〇|〇|〇|〇|Log output day|
-|{HH}|〇|〇|〇|〇|Log output hour|
-|{mm}|〇|〇|〇|〇|Log output minutes|
-|{ss}|〇|〇|〇|〇|Log output second|
-|{HOST}|〇|〇|〇|〇|Host name|
-|{PORT}|〇|〇|〇|〇|Port Number|
-|{SSL}|〇|〇|〇|〇|SSL enabled/disabled|
-|{LISTEN_URI}|〇|〇|〇|〇|Requestable URL|
-|{SSNAME}|〇|〇|〇|〇|Target server section name|
-|{MODE}|〇|-|-|-|Server start\end|
-|{METHOD}|-|〇|〇|-|Request method|
-|{REQUEST_URL}|-|〇|〇|-|Requested URL|
-|{RESPONSE_CODE}|-|〇|〇|-|Response code number|
-|{REMOTE_IP}|-|〇|〇|-|Source IP address information|
-|{REQUEST_QUERY}|-|〇|〇|-|Query information(GET)|
-|{REQUEST_BODY}|-|〇|〇|-|Request body|
-|{ERROR_EXCEPTION}|-|-|〇|〇|Error message|
-|{ERROR_STACK}|-|-|〇|〇|Error details|
+|Short code|access|error|Output result|
+|:--|:-|:--|:--|
+|{DATETIME}|〇|〇|Log output date and time.<br>{YYYY}/{MM}/{DD} {HH}:{mm}:{ss}|
+|{DATE}|〇|〇|Log output date.<br>{YYYY}/{MM}/{DD}|
+|{TIME}|〇|〇|Log output time.<br>{HH}:{mm}:{ss}|
+|{YYYY}|〇|〇|Log output year|
+|{MM}|〇|〇|Log output month|
+|{DD}|〇|〇|Log output day|
+|{HH}|〇|〇|Log output hour|
+|{mm}|〇|〇|Log output minutes|
+|{ss}|〇|〇|Log output second|
+|{HOST}|〇|〇|Host name|
+|{PORT}|〇|〇|Port Number|
+|{SSL}|〇|〇|SSL enabled/disabled|
+|{LISTEN_URI}|〇|〇|Requestable URL|
+|{SSNAME}|〇|〇|Target server section name|
+|{METHOD}|〇|〇|Request method|
+|{REQUEST_URL}|〇|〇|Requested URL|
+|{RESPONSE_CODE}|〇|〇|Response code number|
+|{REMOTE_IP}|〇|〇|Source IP address information|
+|{REQUEST_QUERY}|〇|〇|Query information(GET)|
+|{REQUEST_BODY}|〇|〇|Request body|
+|{ERROR_EXCEPTION}|-|〇|Error message|
+|{ERROR_STACK}|-|〇|Error details|
 
 ---
 
